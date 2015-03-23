@@ -1,6 +1,8 @@
 use strict;
 use warnings;
+
 use Test::More;
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::Fatal;
 
 # TODO: instead of relying on Moose attributes, just call ->check,
@@ -131,4 +133,3 @@ foreach my $tp (
 }
 
 done_testing;
-

@@ -1,11 +1,6 @@
-package MooseX::Types::ISO8601;
-BEGIN {
-  $MooseX::Types::ISO8601::AUTHORITY = 'cpan:ETHER';
-}
-# git description: v0.14-15-gf3d8890
-$MooseX::Types::ISO8601::VERSION = '0.15';
+package MooseX::Types::ISO8601; # git description: v0.15-19-g0e18bc1
 # ABSTRACT: ISO8601 date and duration string type constraints and coercions for Moose
-
+our $VERSION = '0.16';
 use strict;
 use warnings;
 
@@ -21,7 +16,6 @@ use MooseX::Types::DateTime 0.03 qw(Duration DateTime);
 use MooseX::Types::Moose qw/Str Num/;
 use List::MoreUtils qw/ zip /;
 use Scalar::Util qw/ looks_like_number /;
-use Class::Load 'try_load_class';
 use Module::Runtime 'use_module';
 use Try::Tiny;
 use Safe::Isa;
@@ -29,7 +23,7 @@ use Safe::Isa;
 our $MYSQL;
 BEGIN {
     $MYSQL = 0;
-    if (try_load_class 'MooseX::Types::DateTime::MySQL') {
+    if (eval { require MooseX::Types::DateTime::MySQL; 1 }) {
             MooseX::Types::DateTime::MySQL->import(qw/ MySQLDateTime /);
             $MYSQL = 1;
     }
@@ -56,7 +50,7 @@ use MooseX::Types 0.10 -declare => [qw(
 my $date_re =       qr/^(\d{4})-(\d{2})-(\d{2})$/;
 my $time_re =                               qr/^(\d{2}):(\d{2}):(\d{2})(?:(?:\.|,)(\d+))?Z?$/;
 my $datetime_re =   qr/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:(?:\.|,)(\d+))?Z?$/;
-my $datetimetz_re = qr/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:(?:\.|,)(\d+))?((?:\+|-)\d\d:\d\d)$/;
+my $datetimetz_re = qr/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:(?:\.|,)(\d+))?((?:(?:\+|-)\d\d:\d\d)|Z)$/;
 
 subtype ISO8601DateStr,
     as Str,
@@ -302,7 +296,7 @@ MooseX::Types::ISO8601 - ISO8601 date and duration string type constraints and c
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
@@ -331,10 +325,6 @@ version 0.15
 
 This module packages several L<TypeConstraints|Moose::Util::TypeConstraints> with
 coercions for working with ISO8601 date strings and the DateTime suite of objects.
-
-=head1 NAME
-
-MooseX::Types::ISO8601 - ISO8601 date and duration string type constraints and coercions for Moose
 
 =head1 DATE CONSTRAINTS
 
@@ -471,7 +461,7 @@ Probably full of them, patches are very welcome.
 
 Specifically missing features:
 
-=over
+=over 4
 
 =item *
 
@@ -483,8 +473,7 @@ No week number type
 
 =item *
 
-"Basic format", which lacks separator characters, is not supported for
-reading or writing.
+"Basic format", which lacks separator characters, is not supported for reading or writing.
 
 =item *
 
@@ -494,73 +483,37 @@ Tests are rubbish.
 
 =head1 SEE ALSO
 
-=over
+=over 4
 
-=item *
 
-L<MooseX::Types::DateTime>
-
-=item *
-
-L<DateTime>
-
-=item *
-
-L<DateTime::Duration>
-
-=item *
-
-L<DateTime::Format::ISO8601>
-
-=item *
-
-L<DateTime::Format::Duration>
-
-=item *
-
-L<http://en.wikipedia.org/wiki/ISO_8601>
-
-=item *
-
-L<http://dotat.at/tmp/ISO_8601-2004_E.pdf>
 
 =back
 
-=head1 VERSION CONTROL
+* L<MooseX::Types::DateTime>
+* L<DateTime>
+* L<DateTime::Duration>
+* L<DateTime::Format::ISO8601>
+* L<DateTime::Format::Duration>
+* L<http://en.wikipedia.org/wiki/ISO_8601>
+* L<http://dotat.at/tmp/ISO_8601-2004_E.pdf>
 
-    http://github.com/bobtfish/moosex-types-iso8601/tree/master
-
-Patches are welcome.
-
-=head1 AUTHOR
-
-=over
-
-=item Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
-
-=item Dave Lambley C<< <davel@state51.co.uk> >>
-
-=back
+=head1 ACKNOWLEDGEMENTS
 
 The development of this code was sponsored by my employer L<http://www.state51.co.uk>.
 
-=head2 Contributors
+=head1 AUTHORS
 
-=over
+=over 4
 
-=item Aaron Moses
-
-=back
-
-=head1 COPYRIGHT
-
-    Copyright (c) 2009 Tomas Doran. Some rights reserved.
-    This program is free software; you can redistribute
-    it and/or modify it under the same terms as Perl itself.
-
-=head1 AUTHOR
+=item *
 
 Tomas Doran (t0m) <bobtfish@bobtfish.net>
+
+=item *
+
+Dave Lambley <davel@state51.co.uk>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -571,23 +524,9 @@ the same terms as the Perl 5 programming language system itself.
 
 =head1 CONTRIBUTORS
 
+=for stopwords Karen Etheridge Dave Lambley zebardy Aaron Moses Gregory Oschwald
+
 =over 4
-
-=item *
-
-Aaron Moses <zebardy@gmail.com>
-
-=item *
-
-Dave Lambley <dave@lambley.me.uk>
-
-=item *
-
-Dave Lambley <davel@isosceles.(none)>
-
-=item *
-
-Dave Lambley <davel@state51.co.uk>
 
 =item *
 
@@ -595,19 +534,19 @@ Karen Etheridge <ether@cpan.org>
 
 =item *
 
-Tomas Doran (t0m) <t0m@state51.co.uk>
-
-=item *
-
-Tomas Doran <bobtfish@bobtfish.net>
-
-=item *
-
-t0m <bobtfish@bobtfish.net>
+Dave Lambley <dave@lambley.me.uk>
 
 =item *
 
 zebardy <zebardy@gmail.com>
+
+=item *
+
+Aaron Moses <zebardy@gmail.com>
+
+=item *
+
+Gregory Oschwald <goschwald@maxmind.com>
 
 =back
 

@@ -7,9 +7,9 @@ use MooseX::Types::ISO8601 qw/
     ISO8601StrictDateTimeTZStr
 /;
 
-use Test::More tests => 9;
+use Test::More;
 use Test::Deep;
-use Test::NoWarnings 1.04 ':early';
+use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 
 {
     note "String with offset into datetime";
@@ -51,6 +51,18 @@ use Test::NoWarnings 1.04 ':early';
 }
 
 {
+    ok(is_ISO8601DateTimeTZStr('2013-02-21T02:00:00Z'),
+        'String with Z for zero UTC offset');
+    ok(is_ISO8601StrictDateTimeTZStr('2013-02-21T02:00:00Z'),
+        'String with Z for zero UTC offset with DateTime check');
+
+    ok(!is_ISO8601DateTimeTZStr('2013-02-21T02:00:00'),
+        'String without Z');
+    ok(!is_ISO8601StrictDateTimeTZStr('2013-02-21T02:00:00'),
+        'String without Z');
+}
+
+{
     # it doesn't look like we can validate bad timezones, as it's just an arbitrary hour offset?
     ok(is_ISO8601DateTimeTZStr('2013-02-31T02:00:00+01:00'), 'bad datetime validates against our regexp');
     ok(!is_ISO8601StrictDateTimeTZStr('2013-02-31T03:00:00+01:00'), 'bad datetime is caught by strict type');
@@ -58,3 +70,4 @@ use Test::NoWarnings 1.04 ':early';
     is(to_ISO8601StrictDateTimeTZStr('2013-02-01T05:00:00+01:00'), '2013-02-01T05:00:00+01:00');
 }
 
+done_testing;
