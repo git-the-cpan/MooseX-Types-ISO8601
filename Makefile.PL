@@ -80,7 +80,6 @@ my %WriteMakefileArgs = (
     "DateTime::Format::Duration" => "1.03",
     "DateTime::Format::ISO8601" => 0,
     "DateTime::TimeZone" => 0,
-    "List::MoreUtils" => 0,
     "Module::Runtime" => 0,
     "MooseX::Types" => "0.10",
     "MooseX::Types::DateTime" => "0.03",
@@ -106,7 +105,7 @@ my %WriteMakefileArgs = (
     "Test::Requires" => 0,
     "namespace::autoclean" => 0
   },
-  "VERSION" => "0.16",
+  "VERSION" => "0.17",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -120,7 +119,6 @@ my %FallbackPrereqs = (
   "DateTime::TimeZone" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
-  "List::MoreUtils" => 0,
   "Module::Build::Tiny" => "0.039",
   "Module::Runtime" => 0,
   "Moose" => 0,

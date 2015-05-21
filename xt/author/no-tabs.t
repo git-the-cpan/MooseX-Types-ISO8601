@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-# this test was generated with Dist::Zilla::Plugin::Test::NoTabs 0.13
+# this test was generated with Dist::Zilla::Plugin::Test::NoTabs 0.14
 
 use Test::More 0.88;
 use Test::NoTabs;
@@ -28,7 +28,6 @@ my @files = (
     'xt/release/minimum-version.t',
     'xt/release/mojibake.t',
     'xt/release/pod-coverage.t',
-    'xt/release/pod-no404s.t',
     'xt/release/pod-syntax.t',
     'xt/release/portability.t'
 );

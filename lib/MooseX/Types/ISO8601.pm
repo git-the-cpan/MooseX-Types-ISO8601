@@ -1,6 +1,8 @@
-package MooseX::Types::ISO8601; # git description: v0.15-19-g0e18bc1
+package MooseX::Types::ISO8601; # git description: v0.16-6-g369476f
 # ABSTRACT: ISO8601 date and duration string type constraints and coercions for Moose
-our $VERSION = '0.16';
+
+our $VERSION = '0.17';
+
 use strict;
 use warnings;
 
@@ -14,7 +16,6 @@ use DateTime::Duration;
 use DateTime::Format::Duration 1.03;
 use MooseX::Types::DateTime 0.03 qw(Duration DateTime);
 use MooseX::Types::Moose qw/Str Num/;
-use List::MoreUtils qw/ zip /;
 use Scalar::Util qw/ looks_like_number /;
 use Module::Runtime 'use_module';
 use Try::Tiny;
@@ -220,12 +221,12 @@ subtype ISO8601DateTimeDurationStr,
                     my $missing = 9 - length($fields[6]);
                     $fields[6] .= "0" x $missing;
                 }
-                DateTime::Duration->new( zip @datetimefields, @fields );
+                DateTime::Duration->new( do { my %args; @args{@datetimefields} = @fields; %args });
             },
         from ISO8601DateDurationStr,
             via {
                 my @fields = map { $_ || 0 } $_ =~ /$dateduration_re/;
-                DateTime::Duration->new( zip @datefields, @fields );
+                DateTime::Duration->new( do { my %args; @args{@datefields} = @fields; %args } );
             },
         from ISO8601TimeDurationStr,
             via {
@@ -234,7 +235,7 @@ subtype ISO8601DateTimeDurationStr,
                     my $missing = 9 - length($fields[3]);
                     $fields[3] .= "0" x $missing;
                 }
-                DateTime::Duration->new( zip @timefields, @fields );
+                DateTime::Duration->new( do { my %args; @args{@timefields} = @fields; %args } );
             };
 }
 
@@ -253,7 +254,10 @@ subtype ISO8601DateTimeDurationStr,
                     my $missing = 9 - length($fields[6]);
                     $fields[6] .= "0" x $missing;
                 }
-                DT->new( zip(@datetimefields, @fields), time_zone => 'UTC' );
+                DT->new(
+                    do { my %args; @args{@datetimefields} = @fields; %args },
+                    time_zone => 'UTC',
+                );
             },
         from ISO8601DateTimeTZStr,
             via {
@@ -262,12 +266,12 @@ subtype ISO8601DateTimeDurationStr,
                     my $missing = 9 - length($fields[6]);
                     $fields[6] .= "0" x $missing;
                 }
-                DT->new( zip(@datetimetzfields, @fields ) );
+                DT->new( do { my %args; @args{@datetimetzfields} = @fields; %args } );
             },
         from ISO8601DateStr,
             via {
                 my @fields = map { $_ || 0 } $_ =~ /$date_re/;
-                DT->new( zip @datefields, @fields );
+                DT->new( do { my %args; @args{@datefields} = @fields; %args } );
             },
 
         # XXX This coercion does not work as DateTime requires a year.
@@ -278,7 +282,10 @@ subtype ISO8601DateTimeDurationStr,
                     my $missing = 9 - length($fields[3]);
                     $fields[3] .= "0" x $missing;
                 }
-                DT->new( zip(@timefields, @fields), 'time_zone' => 'UTC' );
+                DT->new(
+                    do { my %args; @args{@timefields} = @fields; %args },
+                    time_zone => 'UTC',
+                );
             };
 }
 
@@ -296,7 +303,7 @@ MooseX::Types::ISO8601 - ISO8601 date and duration string type constraints and c
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
