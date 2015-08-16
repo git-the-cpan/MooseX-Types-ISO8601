@@ -1,7 +1,7 @@
-package MooseX::Types::ISO8601; # git description: v0.16-6-g369476f
+package MooseX::Types::ISO8601; # git description: v0.17-8-g110e890
 # ABSTRACT: ISO8601 date and duration string type constraints and coercions for Moose
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 use strict;
 use warnings;
@@ -20,6 +20,7 @@ use Scalar::Util qw/ looks_like_number /;
 use Module::Runtime 'use_module';
 use Try::Tiny;
 use Safe::Isa;
+use if MooseX::Types->VERSION >= 0.42, 'namespace::autoclean';
 
 our $MYSQL;
 BEGIN {
@@ -303,7 +304,7 @@ MooseX::Types::ISO8601 - ISO8601 date and duration string type constraints and c
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 SYNOPSIS
 
@@ -522,13 +523,6 @@ Dave Lambley <davel@state51.co.uk>
 
 =back
 
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2009 by Tomas Doran.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
 =head1 CONTRIBUTORS
 
 =for stopwords Karen Etheridge Dave Lambley zebardy Aaron Moses Gregory Oschwald
@@ -556,5 +550,12 @@ Aaron Moses <zebardy@gmail.com>
 Gregory Oschwald <goschwald@maxmind.com>
 
 =back
+
+=head1 COPYRIGHT AND LICENCE
+
+This software is copyright (c) 2009 by Tomas Doran.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
